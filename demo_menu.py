@@ -27,6 +27,7 @@ class DemoMenu:
     def __init__(self):
         self.base_dir = Path(__file__).parent
         self.venv_path = self.base_dir / "chatterbox_venv"
+        self.model_cached = self.check_model_cache()
         self.demos = {
             "1": {
                 "name": "📋 Installation Test",
@@ -53,45 +54,69 @@ class DemoMenu:
                 "name": "🎬 Quick TTS Demo",
                 "file": "quick_tts_demo.py",
                 "description": "Full TTS with actual audio generation",
-                "duration": "~2-5 minutes",
-                "requirements": "~2GB model download (first run)"
+                "duration": "~30-60 seconds" if self.model_cached else "~2-5 minutes",
+                "requirements": "Model cached" if self.model_cached else "~2GB model download (first run)"
             },
             "5": {
                 "name": "📱 Example TTS (Official)",
                 "file": "example_tts.py",
-                "description": "Official basic TTS example",
-                "duration": "~2-5 minutes",
-                "requirements": "~2GB model download (first run)"
+                "description": "Official basic TTS example", 
+                "duration": "~30-60 seconds" if self.model_cached else "~2-5 minutes",
+                "requirements": "Model cached" if self.model_cached else "~2GB model download (first run)"
             },
             "6": {
                 "name": "🍎 Example for Mac",
                 "file": "example_for_mac.py", 
                 "description": "Mac-optimized TTS with device detection",
-                "duration": "~2-5 minutes",
-                "requirements": "~2GB model download (first run)"
+                "duration": "~30-60 seconds" if self.model_cached else "~2-5 minutes", 
+                "requirements": "Model cached" if self.model_cached else "~2GB model download (first run)"
             },
             "7": {
                 "name": "🔄 Voice Conversion Demo",
                 "file": "example_vc.py",
                 "description": "Voice conversion example (needs audio files)",
-                "duration": "~2-5 minutes", 
-                "requirements": "Audio files + model download"
+                "duration": "~30-60 seconds" if self.model_cached else "~2-5 minutes", 
+                "requirements": f"Audio files + {'model cached' if self.model_cached else 'model download'}"
             },
             "8": {
                 "name": "🌐 Gradio TTS App",
                 "file": "gradio_tts_app.py",
                 "description": "Full web interface for TTS",
                 "duration": "Runs until stopped",
-                "requirements": "~2GB model download + web browser"
+                "requirements": f"{'Model cached' if self.model_cached else '~2GB model download'} + web browser"
             },
             "9": {
                 "name": "🔄 Gradio VC App", 
                 "file": "gradio_vc_app.py",
                 "description": "Full web interface for voice conversion",
                 "duration": "Runs until stopped",
-                "requirements": "Model download + web browser"
+                "requirements": f"{'Model cached' if self.model_cached else 'Model download'} + web browser"
             }
         }
+
+    def check_model_cache(self):
+        """Check if Chatterbox models are already cached"""
+        try:
+            import os
+            
+            # Check for cached model files
+            cache_dir = os.path.expanduser("~/.cache/huggingface/hub")
+            repo_cache_dir = os.path.join(cache_dir, "models--ResembleAI--chatterbox")
+            
+            if os.path.exists(repo_cache_dir):
+                snapshots_dir = os.path.join(repo_cache_dir, "snapshots")
+                if os.path.exists(snapshots_dir):
+                    # Check if any snapshot has the key model files
+                    for snapshot in os.listdir(snapshots_dir):
+                        snapshot_path = os.path.join(snapshots_dir, snapshot)
+                        if os.path.isdir(snapshot_path):
+                            # Check for key model files
+                            key_files = ["t3_cfg.safetensors", "s3gen.safetensors", "ve.safetensors"]
+                            if all(os.path.exists(os.path.join(snapshot_path, f)) for f in key_files):
+                                return True
+            return False
+        except Exception:
+            return False
 
     def clear_screen(self):
         """Clear the terminal screen"""
@@ -114,6 +139,10 @@ class DemoMenu:
         # Check for virtual environment
         venv_status = "✅ Found" if self.venv_path.exists() else "❌ Not found"
         print(f"   🐍 Virtual Environment: {venv_status}")
+        
+        # Check for model cache
+        cache_status = "✅ Cached" if self.model_cached else "❌ Not cached"
+        print(f"   🤖 Model Cache: {cache_status}")
         
         # Check for key demo files
         demo_files = ["installation_test.py", "quick_tts_demo.py", "gradio_tts_app.py"]
@@ -165,11 +194,13 @@ class DemoMenu:
         print()
         
         # Ask for confirmation for longer demos
-        if "minutes" in demo['duration'] or "download" in demo['requirements'].lower():
+        if not self.model_cached and ("download" in demo['requirements'].lower() or "minutes" in demo['duration']):
             response = input(f"{Colors.YELLOW}⚠️  This demo requires model download (~2GB). Continue? (y/N): {Colors.END}")
             if response.lower() not in ['y', 'yes']:
                 print("Demo cancelled.")
                 return False
+        elif self.model_cached and demo_key in ["4", "5", "6", "7"]:
+            print(f"{Colors.GREEN}✅ Model already cached - this will run quickly!{Colors.END}")
         
         print(f"{Colors.CYAN}{'='*50}{Colors.END}")
         
