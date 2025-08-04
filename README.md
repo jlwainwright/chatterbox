@@ -19,6 +19,7 @@ If you like the model but need to scale or tune it for higher accuracy, check ou
 
 - [Key Features](#-key-features)
 - [Quick Start](#-quick-start)
+- [CLI Demo Menu](#-cli-demo-menu)
 - [Installation](#-installation)
 - [Voice Cloning Guide](#-voice-cloning-guide)  
 - [Comprehensive Demos](#-comprehensive-demos)
@@ -68,6 +69,67 @@ print("🎉 Success! Generated welcome.wav")
 2. Generated high-quality speech using the built-in voice
 3. Applied imperceptible watermarking for responsible AI usage
 4. Saved 22kHz audio ready for production use
+
+# 🎭 CLI Demo Menu
+
+**New!** Interactive command-line menu for exploring all Chatterbox TTS demos with guided assistance.
+
+## ⚡ Launch the Menu
+
+```bash
+# Direct launch
+python demo_menu.py
+
+# Platform-specific launchers
+./run_demos.sh        # macOS/Linux
+run_demos.bat         # Windows
+python run_demos.py   # Cross-platform
+```
+
+## 🎯 What You Get
+
+The CLI menu provides a professional, guided experience with:
+
+- **🎭 9 Interactive Demos** - From quick tests to full TTS generation
+- **🛠️ System Information** - Automatic device detection and compatibility checking
+- **📦 Automated Setup** - One-click virtual environment and dependency installation
+- **🎨 Colored Interface** - Beautiful terminal UI with status indicators
+- **⚡ Smart Execution** - Automatic virtual environment activation
+- **🚨 Error Handling** - Helpful guidance when things go wrong
+
+## 📋 Demo Categories
+
+### 🔍 Testing & Setup (No Model Download)
+- **📋 Installation Test** (~30 seconds) - Verify all dependencies
+- **⚡ Minimal Demo** (~10 seconds) - Quick overview without model loading
+- **🌐 Web Interface Test** (~15 seconds) - Test Gradio integration
+
+### 🎵 Audio Generation (Requires Model Download)
+- **🎬 Quick TTS Demo** (~2-5 minutes) - Full TTS with actual audio generation
+- **📱 Example TTS** (~2-5 minutes) - Official basic example
+- **🍎 Example for Mac** (~2-5 minutes) - Mac-optimized with device detection
+- **🔄 Voice Conversion** (~2-5 minutes) - Transform audio to match target voice
+
+### 🌐 Web Interfaces (Browser-Based)
+- **🌐 Gradio TTS App** - Full browser-based TTS interface
+- **🔄 Gradio VC App** - Browser-based voice conversion
+
+## 🎛️ Menu Features
+
+- **Smart Guidance** - Duration estimates and requirement descriptions
+- **Confirmation Prompts** - For operations requiring downloads
+- **System Detection** - Automatic CUDA/MPS/CPU detection
+- **Help System** - Comprehensive help (press `h`)
+- **Installation Assistant** - Automated environment setup (press `i`)
+
+## 💡 Perfect For
+
+- **First-time users** exploring Chatterbox capabilities
+- **Developers** testing different configurations  
+- **Researchers** comparing voice cloning approaches
+- **Anyone** who wants guided access to all features
+
+See [CLI_MENU_README.md](CLI_MENU_README.md) for complete documentation.
 
 # 📦 Installation
 
