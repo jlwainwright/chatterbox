@@ -1,0 +1,41 @@
+{
+  "hooks": {
+    "post-task": {
+      "enabled": true,
+      "command": "python .claude/hooks/post-task.py",
+      "description": "TTS feedback on task completion",
+      "timeout": 30
+    },
+    "pre-task": {
+      "enabled": false,
+      "command": "python .claude/hooks/pre-task.py", 
+      "description": "TTS feedback on task start (optional)",
+      "timeout": 15
+    },
+    "post-edit": {
+      "enabled": false,
+      "command": "python .claude/hooks/post-edit.py",
+      "description": "TTS feedback on file edits (can be noisy)",
+      "timeout": 10
+    }
+  },
+  "tts": {
+    "enabled": true,
+    "voice_settings": {
+      "exaggeration": 0.5,
+      "cfg_weight": 0.5,
+      "temperature": 0.7
+    },
+    "audio_settings": {
+      "auto_play": true,
+      "save_files": true,
+      "cleanup_old_files": true,
+      "max_message_length": 100
+    }
+  },
+  "preferences": {
+    "verbose_hooks": false,
+    "success_only": false,
+    "rate_limit_edits": true
+  }
+}
